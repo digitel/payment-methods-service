@@ -2,6 +2,7 @@ package org.tmf.openapi.payment.domain;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -38,8 +39,8 @@ public class PaymentMethod {
 	@Valid
 	private TimePeriod validFor;
 
-	// @Valid
-	private AccountRef account;
+	@Valid
+	private List<AccountRef> account;
 
 	private Boolean preferred;
 

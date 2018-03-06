@@ -17,8 +17,10 @@ import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,11 +39,12 @@ public class PaymentMethodController {
 	PaymentMethodService paymentMethodService;
 
 	@PostMapping(value = "/paymentMethod", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<MappingJacksonValue> createPaymentMethod(@RequestBody @Valid PaymentMethod paymentMethod, UriComponentsBuilder b) throws URISyntaxException {
-				
+	public ResponseEntity<MappingJacksonValue> createPaymentMethod(@RequestBody @Valid PaymentMethod paymentMethod,
+			UriComponentsBuilder b) throws URISyntaxException {
+
 		paymentMethod = paymentMethodService.createPaymentMethod(paymentMethod);
-		
-		 return ResponseEntity.created(new URI("/paymentMethod/" + paymentMethod.getId()))
+
+		return ResponseEntity.created(new URI("/paymentMethod/" + paymentMethod.getId()))
 				.body(mapObjectWithExcludeFilter(populateHref(paymentMethod), null));
 	}
 
@@ -75,6 +78,32 @@ public class PaymentMethodController {
 		return ResponseEntity.ok(mapObjectWithExcludeFilter(
 				populateHref(paymentMethodService.findPaymentMethodByAccountId(accountId)), requestParams));
 
+	}
+
+	@PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MappingJacksonValue> patchPaymentMethod(@PathVariable String id,
+			@RequestBody PaymentMethod paymentMethod) {
+
+		validatePaymentMethod(id, paymentMethod);
+		return ResponseEntity.ok(mapObjectWithExcludeFilter(
+				populateHref(paymentMethodService.partialUpdatePaymentMethod(paymentMethod)), null));
+
+	}
+
+	@PutMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MappingJacksonValue> updatePaymentMethod(@PathVariable String id,
+			@RequestBody PaymentMethod paymentMethod) {
+
+		validatePaymentMethod(id, paymentMethod);
+		return ResponseEntity.ok(mapObjectWithExcludeFilter(
+				populateHref(paymentMethodService.updatePaymentMethod(paymentMethod)), null));
+
+	}
+
+	private void validatePaymentMethod(String id, PaymentMethod paymentMethod) {
+		if ((null == paymentMethod.getId()) || (null != paymentMethod.getId() && !paymentMethod.getId().equals(id))) {
+			throw new IllegalArgumentException("id cannot be updated.");
+		}
 	}
 
 	private PaymentMethod populateHref(PaymentMethod paymentMethod) {

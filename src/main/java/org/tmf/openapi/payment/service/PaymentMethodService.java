@@ -28,7 +28,7 @@ public class PaymentMethodService {
 	public PaymentMethod findPaymentMethod(@NotNull String id) {
 		return paymentMethodRepository.findById(id).get();
 	}
-	
+
 	public List<PaymentMethod> findAllPaymentMethods(Predicate predicate) {
 		return toList(paymentMethodRepository.findAll(predicate));
 	}
@@ -41,6 +41,57 @@ public class PaymentMethodService {
 		PaymentMethod existingPaymentMethod = getExistingPaymentMethod(id);
 		paymentMethodRepository.delete(existingPaymentMethod);
 
+	}
+
+	public PaymentMethod updatePaymentMethod(@Valid PaymentMethod paymentMethod) {
+
+		return paymentMethodRepository.save(paymentMethod);
+	}
+
+	public PaymentMethod partialUpdatePaymentMethod(PaymentMethod paymentMethod) {
+
+		if (null == paymentMethod.getId()) {
+			throw new IllegalArgumentException("id is mandatory field for update.");
+		}
+
+		PaymentMethod existingPaymentMethod = getExistingPaymentMethod(paymentMethod.getId());
+
+		if (null != paymentMethod.getName()) {
+			existingPaymentMethod.setName(paymentMethod.getName());
+		}
+		if (null != paymentMethod.getDescription()) {
+			existingPaymentMethod.setDescription(paymentMethod.getDescription());
+		}
+		if (null != paymentMethod.getValidFor()) {
+			existingPaymentMethod.setValidFor(paymentMethod.getValidFor());
+		}
+
+		if (null != paymentMethod.getAccount()) {
+			existingPaymentMethod.setAccount(paymentMethod.getAccount());
+		}
+
+		if (null != paymentMethod.getPreferred()) {
+			existingPaymentMethod.setPreferred(paymentMethod.getPreferred());
+		}
+
+		if (null != paymentMethod.getRelatedParty()) {
+			existingPaymentMethod.setRelatedParty(paymentMethod.getRelatedParty());
+		}
+
+		if (null != paymentMethod.getType()) {
+			existingPaymentMethod.setType(paymentMethod.getType());
+		}
+		if (null != paymentMethod.getAuthorizationCode()) {
+			existingPaymentMethod.setAuthorizationCode(paymentMethod.getAuthorizationCode());
+		}
+		if (null != paymentMethod.getStatus()) {
+			existingPaymentMethod.setStatus(paymentMethod.getStatus());
+		}
+		if (null != paymentMethod.getStatusDate()) {
+			existingPaymentMethod.setStatusDate(paymentMethod.getStatusDate());
+		}
+
+		return paymentMethodRepository.save(existingPaymentMethod);
 	}
 
 	private PaymentMethod getExistingPaymentMethod(@NotNull String id) {
