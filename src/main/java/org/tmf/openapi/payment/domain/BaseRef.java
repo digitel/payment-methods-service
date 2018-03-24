@@ -2,6 +2,8 @@ package org.tmf.openapi.payment.domain;
 
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -14,11 +16,13 @@ public abstract class BaseRef {
 	@NotEmpty
 	private String id;
 
-	@NotEmpty
 	private String href;
 
 	private String name;
 
 	private String description;
+
+	@JsonProperty("@referredType")
+	private String referredType;
 
 }

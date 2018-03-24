@@ -1,7 +1,5 @@
 package org.tmf.openapi.payment.domain;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -10,7 +8,7 @@ import lombok.Data;
 public class Check implements PaymentMethodDetail {
 
 	@NotEmpty
-	private String code;
+	private String checkId;
 	@NotEmpty
 	private String drawer;
 	@NotEmpty
@@ -18,6 +16,6 @@ public class Check implements PaymentMethodDetail {
 	@NotEmpty
 	private String bank;
 
-	private Date date;
+	private String date;
 
 }

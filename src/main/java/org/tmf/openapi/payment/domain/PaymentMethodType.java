@@ -9,6 +9,7 @@ public enum PaymentMethodType {
 									Constants.TOKENIZED_CARD), loyaltyRef(Constants.LOYALTY_REF), bucketRef(Constants.BUCKET_REF);
 
 	PaymentMethodType(String paymentMethod) {
+		//TODO what this string do ?
 	}
 
 	public static class Constants {

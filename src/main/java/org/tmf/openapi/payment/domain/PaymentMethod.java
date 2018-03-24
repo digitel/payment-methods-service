@@ -2,7 +2,6 @@ package org.tmf.openapi.payment.domain;
 
 import java.net.URI;
 import java.util.Date;
-import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -13,6 +12,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -40,14 +40,14 @@ public class PaymentMethod {
 	private TimePeriod validFor;
 
 	@Valid
-	private List<AccountRef> account;
+	private AccountRef account;
 
 	private Boolean preferred;
 
 	@Valid
 	private RelatedPartyRef relatedParty;
 
-	// @JsonProperty("@type")
+	@JsonProperty("@type")
 	@JsonTypeId
 	@NotNull
 	private PaymentMethodType type;
@@ -58,7 +58,7 @@ public class PaymentMethod {
 
 	private Date statusDate;
 
-	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
+	@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "@type")
 	@JsonSubTypes({ @JsonSubTypes.Type(value = AccountRef.class, name = PaymentMethodType.Constants.ACCOUNT_REF),
 			@JsonSubTypes.Type(value = Check.class, name = PaymentMethodType.Constants.CHECK),
 			@JsonSubTypes.Type(value = BankCard.class, name = PaymentMethodType.Constants.BANK_CARD),
